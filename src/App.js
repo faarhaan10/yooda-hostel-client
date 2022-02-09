@@ -1,6 +1,7 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import './App.css';
 import Home from './Pages/Home/Home/Home';
+import NotFound from "./Pages/NotFound/NotFound";
 
 function App() {
   return (
@@ -9,8 +10,9 @@ function App() {
         <Routes>
           <Route index element={<Home />} />
           <Route path="home" element={<Home />} />
-          </Routes>
-          </BrowserRouter>
+          <Route path="*" exact element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
