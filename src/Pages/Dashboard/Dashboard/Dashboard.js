@@ -14,6 +14,10 @@ import Typography from '@mui/material/Typography';
 import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import SvgIcon from '@mui/material/SvgIcon';
 import ManageUsers from '../ManageUsers/ManageUsers';
+import Students from '../Students/Students';
+import AddStudent from '../AddStudent/AddStudent';
+import AddFood from '../AddFood/AddFood';
+import ServeFood from '../ServeFood/ServeFood';
 
 
 const drawerWidth = 240;
@@ -46,6 +50,50 @@ function Dashboard(props) {
                                     ml: 5
                                 }}>
                                 manage users
+                            </Typography>
+                        </ListItem>
+                    </Link>
+                    <Link to={'addfood'} style={{ textDecoration: 'none' }}>
+                        <ListItem button >
+                            <Typography
+                                variant="button" display="block" color="secondary"
+                                sx={{
+                                    ml: 5
+                                }}>
+                                Add foods
+                            </Typography>
+                        </ListItem>
+                    </Link>
+                    <Link to={'addstudents'} style={{ textDecoration: 'none' }}>
+                        <ListItem button >
+                            <Typography
+                                variant="button" display="block" color="secondary"
+                                sx={{
+                                    ml: 5
+                                }}>
+                                Add Students
+                            </Typography>
+                        </ListItem>
+                    </Link>
+                    <Link to={'students'} style={{ textDecoration: 'none' }}>
+                        <ListItem button >
+                            <Typography
+                                variant="button" display="block" color="secondary"
+                                sx={{
+                                    ml: 5
+                                }}>
+                                Students
+                            </Typography>
+                        </ListItem>
+                    </Link>
+                    <Link to={'serve'} style={{ textDecoration: 'none' }}>
+                        <ListItem button >
+                            <Typography
+                                variant="button" display="block" color="secondary"
+                                sx={{
+                                    ml: 5
+                                }}>
+                                Serve foods
                             </Typography>
                         </ListItem>
                     </Link>
@@ -138,6 +186,10 @@ function Dashboard(props) {
             >
                 <Routes>
                     <Route path="manage" element={<ManageUsers />} />
+                    <Route path="addstudents" element={<AddStudent />} />
+                    <Route path="students" element={<Students />} />
+                    <Route path="serve" element={<ServeFood />} />
+                    <Route path="addfood" element={<AddFood />} />
                 </Routes>
 
             </Box>
