@@ -5,23 +5,26 @@ import { Button, Container } from '@mui/material';
 
 const Banner = () => {
     return (
-        <Box
+        <Box style={{background:'linear-gradient(to right, #7f00ff, #e100ff)'}}
             sx={{ textAlign: 'center' }}>
             <Container sx={{ py: 8 }}>
+                <Box sx={{
+                    height:'70vh',
+                    width:'100%',
+                    display:'flex',
+                    alignItems:'center',
+                    justifyContent:'center'
+                    }}>
+                <Box sx={{}}>
                 <Typography
                     variant="h3"
                     gutterBottom
                     component="div"
                 >
-                    Enjoy your trip!
+                    WELCOME TO ADMIN PANEL
                 </Typography>
-                <Box sx={{
-                    height: 323,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'end'
-                }}>
                     <Button variant="contained">Book Now</Button>
+                </Box>
                 </Box>
             </Container>
 
