@@ -6,7 +6,16 @@ import { useForm } from "react-hook-form";
 const AddStudent = () => {
     const [status, setStatus] = React.useState('');
     const { register, handleSubmit, reset } = useForm();
-    const onSubmit = data => console.log({ ...data, status });
+    const onSubmit = data => {
+        const newData = { ...data, status };
+        axios.post('http://localhost:5000/students', newData)
+            .then(res => {
+                if (res.data.insertedId) {
+                    window.alert('student added');
+                    reset();
+                }
+            });
+    };
 
 
 
