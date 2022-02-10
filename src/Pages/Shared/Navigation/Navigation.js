@@ -7,9 +7,7 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 
@@ -35,7 +33,7 @@ const Navigation = () => {
     };
 
     return (
-        <AppBar position="static">
+        <AppBar position="fixed" sx={{ background: 'transparent' }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     <Typography
@@ -109,7 +107,7 @@ const Navigation = () => {
                         flexGrow: 1,
                         display: { xs: 'none', md: 'flex' }, justifyContent: 'end'
                     }}>
-                        
+
                         <Link to='/dashboard' style={{ textDecoration: 'none' }}>
                             <Button
                                 onClick={handleCloseNavMenu}
@@ -119,7 +117,7 @@ const Navigation = () => {
                         </Link>
                     </Box>
 
-                    
+
                 </Toolbar>
             </Container>
         </AppBar>

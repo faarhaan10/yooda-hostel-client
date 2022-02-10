@@ -11,13 +11,13 @@ import ListItem from '@mui/material/ListItem';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Link, Route, Routes, useNavigate } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 import SvgIcon from '@mui/material/SvgIcon';
-import ManageUsers from '../ManageUsers/ManageUsers';
 import Students from '../Students/Students';
 import AddStudent from '../AddStudent/AddStudent';
 import AddFood from '../AddFood/AddFood';
 import ServeFood from '../ServeFood/ServeFood';
+import Welcome from './Welcome';
 
 
 const drawerWidth = 240;
@@ -25,7 +25,6 @@ const drawerWidth = 240;
 function Dashboard(props) {
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const { window } = props;
-    const navigate = useNavigate();
 
 
     const handleDrawerToggle = () => {
@@ -42,17 +41,6 @@ function Dashboard(props) {
             <List>
 
                 <Box>
-                    <Link to={'manage'} style={{ textDecoration: 'none' }}>
-                        <ListItem button >
-                            <Typography
-                                variant="button" display="block" color="secondary"
-                                sx={{
-                                    ml: 5
-                                }}>
-                                manage users
-                            </Typography>
-                        </ListItem>
-                    </Link>
                     <Link to={'addfood'} style={{ textDecoration: 'none' }}>
                         <ListItem button >
                             <Typography
@@ -185,7 +173,7 @@ function Dashboard(props) {
                 sx={{ flexGrow: 1, px: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
                 <Routes>
-                    <Route path="manage" element={<ManageUsers />} />
+                    <Route path="/" element={<Welcome />} />
                     <Route path="addstudents" element={<AddStudent />} />
                     <Route path="students" element={<Students />} />
                     <Route path="serve" element={<ServeFood />} />
