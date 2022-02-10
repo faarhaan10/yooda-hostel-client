@@ -1,6 +1,6 @@
 import * as React from 'react';
 import axios from 'axios';
-import { Button, Paper, Box, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Pagination } from '@mui/material';
+import { Button, Paper, Box, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Pagination, Stack } from '@mui/material';
 import { useForm } from "react-hook-form";
 import EditFood from './EditFood';
 
@@ -8,10 +8,12 @@ const AddFood = () => {
     const [foodItems, setFoodItems] = React.useState([]);
     const [displayFoodItems, setDisplayFoodItems] = React.useState([]);
     const [editItem, setEditItem] = React.useState({});
+    const [isAdded, setIsAdded] = React.useState('');
     const [page, setPage] = React.useState(0);
+    const [total, setTotal] = React.useState(0);
     const [pageCount, setPageCount] = React.useState(0);
     const [open, setOpen] = React.useState(false);
-    const size = 10;
+    const size = 5;
 
     const { register, handleSubmit, reset } = useForm();
     const onSubmit = data => {
@@ -19,6 +21,7 @@ const AddFood = () => {
             .then(res => {
                 if (res.data.insertedId) {
                     window.alert('food added');
+                    setIsAdded(res.data.insertedId)
                     reset();
                 }
             });
@@ -31,25 +34,23 @@ const AddFood = () => {
                 setFoodItems(res.data.result);
                 setDisplayFoodItems(res.data.result);
                 const count = res.data.count;
+                setTotal(count);
                 const pageNumber = Math.ceil(count / size);
                 setPageCount(pageNumber);
             })
-    }, [page, open]);
+    }, [page, open, isAdded]);
 
     // delete handler
-    const handleDelete = () => {
+    const handleDelete = id => {
 
-        // axios.delete(`${databaseUri}/manage`, { data: selectedUsers })
-        //     .then(res => {
-        //         if (res.data.deletedCount) {
-        //             alert('Users deleted Succesfully');
-        //             const restUsers = selectedUsers.filter(
-        //                 user => allUser.filter(
-        //                     oldUser => oldUser !== user));
-        //             setAllUser(restUsers);
-        //             setDisplayUser(restUsers);
-        //         }
-        //     });
+        axios.delete(`http://localhost:5000/foods/${id}`)
+            .then(res => {
+                if (res.data.deletedCount) {
+                    alert('Users deleted Succesfully');
+                    const restFoods = foodItems.find(item => item._id !== id);
+                    setFoodItems(restFoods);
+                }
+            });
     };
 
 
@@ -98,9 +99,15 @@ const AddFood = () => {
 
 
             </Box>
-            <Typography variant="body1" sx={{ pl: 3, pt: 3 }} >
-                Foods
-            </Typography>
+            <Stack direction="row" spacing={2} sx={{ justifyContent: 'space-between' }}>
+                <Typography variant="body1" sx={{ p: 3 }} >
+                    Foods in this page: {foodItems.length}
+                </Typography>
+                <Typography variant="body1" sx={{ p: 3 }} >
+                    Total Food Items: {total}
+                </Typography>
+            </Stack>
+
             <TableContainer sx={{ minHeight: 350, background: '#ddd' }}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
@@ -141,14 +148,22 @@ const AddFood = () => {
                                     <Button onClick={() => handleOpen(item)} size="small" variant="contained" color='success'>EDIT</Button>
                                 </TableCell>
                                 <TableCell >
-                                    <Button size="small" variant="contained" color='error'>Delete</Button>
+                                    <Button onClick={() => handleDelete(item._id)} size="small" variant="contained" color='error'>Delete</Button>
                                 </TableCell>
                             </TableRow>)
                         }
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Pagination sx={{ p: 2 }} count={pageCount} variant="outlined" shape="rounded" />
+            <Stack direction="row" spacing={2} sx={{ alignItems: 'center', px: 3 }}>
+                <Typography>Page: {page + 1}</Typography>
+                <Pagination
+                    onChange={(event, value) => setPage(value - 1)}
+                    sx={{ p: 2 }}
+                    count={pageCount}
+                    variant="outlined" shape="rounded" />
+            </Stack>
+
             <EditFood open={open} setOpen={setOpen} item={editItem} />
         </Paper >
     );
