@@ -1,11 +1,63 @@
-import { FormControl, Grid, InputLabel, MenuItem, Paper, Select, Stack, TextField, Typography } from '@mui/material';
+import { Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, Stack, TextField, Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import axios from 'axios';
 import React, { useState } from 'react';
 
 const ServeFood = () => {
+    const [foods, setFoods] = useState([]);
+    const [student, setStudent] = useState({});
     const [search, setSearch] = useState('');
-    const [shift, setShift] = React.useState('');
+    const [shift, setShift] = useState('');
+    const [foodItem, setFoodItem] = useState([]);
+    const [foodSelect, setFoodSelect] = useState('');
+    const [date, setDate] = useState('');
+    const [toggle, setToggle] = useState(false)
 
+    React.useEffect(() => {
+        axios.get(`http://localhost:5000/student/roll/${search}`)
+            .then(res => {
+                setStudent(res.data);
+            })
+    }, [search, toggle]);
+
+    React.useEffect(() => {
+        axios.get(`http://localhost:5000/foods`)
+            .then(res => {
+                setFoods(res.data.result);
+            })
+    }, []);
+
+    const handleAddFood = food => {
+        setFoodSelect(food)
+        if (foodItem.includes(food) || foodItem.length > 4) return;
+
+        const newFoods = [...foodItem, food];
+        setFoodItem(newFoods);
+    };
+
+    const handleSubmit = () => {
+        const data = {
+            studentId: student._id,
+            date,
+            shift,
+            status: 'served',
+            foodItem
+        };
+        const statusUpdate = { status: 'served' }
+        axios.put(`http://localhost:5000/serve/${student._id}`, statusUpdate)
+            .then(res => {
+                if (res.data.insertedId) {
+                }
+            });
+
+        axios.post('http://localhost:5000/serve', data)
+            .then(res => {
+                if (res.data.insertedId) {
+                    window.alert('served');
+                    setToggle(!toggle);
+                }
+            });
+    }
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden', mt: 10 }}>
@@ -22,27 +74,43 @@ const ServeFood = () => {
                     variant="outlined"
                 />
             </Box>
-            <Box sx={{ p: 3 }}>
+            {student.fullName && <Box sx={{ p: 3 }}>
                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                     <Grid item xs={6}>
                         <Typography variant="h6" component="div" sx={{ m: '0 auto' }}>
-                            Name:
+                            Name: {student.fullName}
                         </Typography>
                         <Typography variant="h6" component="div" sx={{ m: '0 auto' }}>
-                            Roll:
+                            Roll: {student.roll}
                         </Typography>
                         <Typography variant="h6" component="div" sx={{ m: '0 auto' }}>
-                            Class:
+                            Class: {student.roll}
                         </Typography>
                         <Typography variant="h6" component="div" sx={{ m: '0 auto' }}>
-                            Hall:
+                            Hall: {student.hall}
                         </Typography>
                         <Typography variant="h6" component="div" sx={{ m: '0 auto' }}>
-                            Status:
+                            Status: {student.status}
                         </Typography>
+                        {foodItem.length !== 0 && <Box>
+                            <Typography variant="h6" component="div" sx={{ m: '0 auto' }}>
+                                Foods:
+                            </Typography>
+                            <Stack direction='row'>
+                                {
+                                    foodItem.map(item => <Typography
+                                        key={item}
+                                        variant="caption"
+                                        display="block"
+                                    >
+                                        {item},
+                                    </Typography>)
+                                }
+                            </Stack>
+                        </Box>}
                     </Grid>
                     <Grid item xs={6}>
-                        <Box componant='form'>
+                        {student.status !== 'served' ? <Box componant='form'>
                             <Stack spacing={2}>
                                 <FormControl fullWidth>
                                     <InputLabel id="demo-simple-select-label">Shift</InputLabel>
@@ -59,31 +127,41 @@ const ServeFood = () => {
                                     </Select>
                                 </FormControl>
                                 <TextField
-                                    label="Date"
                                     type='date'
                                     variant="outlined"
+                                    onChange={e => setDate(e.target.value)}
                                 />
                                 <FormControl fullWidth>
-                                    <InputLabel id="demo-simple-select-label">Shift</InputLabel>
+                                    <InputLabel id="demo-simple-select-label">Selelct Food</InputLabel>
                                     <Select
                                         labelId="demo-simple-select-label"
                                         id="demo-simple-select"
-                                        value={shift}
-                                        label="Age"
-                                        onChange={e => setShift(e.target.value)}
+                                        value={foodSelect}
+                                        label="Selelct Food"
+                                        onChange={e => handleAddFood(e.target.value)}
                                     >
-                                        <MenuItem value={'morning'}>Morning</MenuItem>
-                                        <MenuItem value={'noon'}>Noon</MenuItem>
-                                        <MenuItem value={'night'}>Night</MenuItem>
+                                        {
+                                            foods.map(fd => <MenuItem
+                                                key={fd._id}
+                                                value={fd.name}>{fd.name}</MenuItem>)
+                                        }
                                     </Select>
                                 </FormControl>
                             </Stack>
 
                         </Box>
+                            :
+                            <Typography variant="h3" component="div" sx={{ m: '0 auto' }}>
+                                Already served
+                            </Typography>
+                        }
                     </Grid>
                 </Grid>
+                {student.status !== 'served' && <Button sx={{ my: 2, px: 5 }} variant="contained" color='warning' onClick={handleSubmit}>
+                    Serve
+                </Button>}
 
-            </Box>
+            </Box>}
         </Paper>
 
     );
