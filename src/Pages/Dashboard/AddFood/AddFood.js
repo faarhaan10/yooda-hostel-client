@@ -1,12 +1,11 @@
 import * as React from 'react';
 import axios from 'axios';
-import { Button, Paper, Box, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Pagination, Stack } from '@mui/material';
+import { Button, Paper, Box, Grid, TextField, Typography, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Pagination, Stack } from '@mui/material';
 import { useForm } from "react-hook-form";
 import EditFood from './EditFood';
 
 const AddFood = () => {
     const [foodItems, setFoodItems] = React.useState([]);
-    const [displayFoodItems, setDisplayFoodItems] = React.useState([]);
     const [editItem, setEditItem] = React.useState({});
     const [isAdded, setIsAdded] = React.useState('');
     const [page, setPage] = React.useState(0);
@@ -32,7 +31,6 @@ const AddFood = () => {
         axios.get(`https://yooda-hostel-server-side.herokuapp.com/foods?page=${page}&&size=${size}`)
             .then(res => {
                 setFoodItems(res.data.result);
-                setDisplayFoodItems(res.data.result);
                 const count = res.data.count;
                 setTotal(count);
                 const pageNumber = Math.ceil(count / size);
@@ -46,7 +44,7 @@ const AddFood = () => {
         axios.delete(`https://yooda-hostel-server-side.herokuapp.com/foods/${id}`)
             .then(res => {
                 if (res.data.deletedCount) {
-                    alert('Users deleted Succesfully');
+                    alert('Food deleted Succesfully');
                     const restFoods = foodItems.find(item => item._id !== id);
                     setFoodItems(restFoods);
                 }

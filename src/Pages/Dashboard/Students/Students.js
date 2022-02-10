@@ -43,7 +43,7 @@ const Students = () => {
         axios.delete(`https://yooda-hostel-server-side.herokuapp.com/students/${id}`)
             .then(res => {
                 if (res.data.deletedCount) {
-                    alert('Users deleted Succesfully');
+                    alert('Student deleted Succesfully');
                     const restStudents = allStudent.filter(student => student._id !== id);
                     setAllStudent(restStudents);
                 }
@@ -54,7 +54,7 @@ const Students = () => {
         axios.put(`https://yooda-hostel-server-side.herokuapp.com/students`, data)
             .then(res => {
                 if (res.data.acknowledged) {
-                    alert('Users updated Succesfully');
+                    alert('Students updated Succesfully');
                     setToggle(!toggle);
                 }
             });

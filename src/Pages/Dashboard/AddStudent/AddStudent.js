@@ -22,10 +22,8 @@ const AddStudent = () => {
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden', mt: 10 }}>
-            <Typography variant="body1" sx={{ p: 2 }} >
-                Result in page
-                <br />
-                Selected:
+            <Typography variant="h5" sx={{ px: 3, pt: 2 }} >
+                Add new student
             </Typography>
             <Box
                 component="form"
@@ -99,7 +97,7 @@ const AddStudent = () => {
                         </FormControl>
                     </Grid>
                 </Grid>
-                <Button sx={{ mt: 2 }} type='submit' variant="contained" color="success">
+                <Button sx={{ mt: 2, px: 5 }} type='submit' variant="contained" color="success">
                     Add
                 </Button>
             </Box>
