@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
-import { Button, Stack } from '@mui/material';
+import { Button, FormControl, InputLabel, MenuItem, Select, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { useForm } from "react-hook-form";
 import axios from 'axios';
@@ -38,33 +38,30 @@ const style = {
     p: 4,
 };
 
-export default function BasicModal({ open, setOpen, handleDelete }) {
+export default function BasicModal({ open, setOpen, editStudent }) {
+    const [newStatus, setNewStatus] = React.useState('');
     const { register, handleSubmit } = useForm();
 
 
     const onSubmit = data => {
-        // axios.put(`${databaseUrl}/blogs/${_id}`, data)
-        //     .then(res => {
-        //         if (res.data.acknowledged) {
-        //             handleToast('success', 'Blog Approved Succesfully');
-        //             setOpen(false);
-        //         }
-        //     });
+        let newData;
+        if (newStatus) {
+            newData = { ...data, status: newStatus };
+        } else {
+            newData = { ...data, status: editStudent.status };
+        }
+
+        axios.put(`http://localhost:5000/students/${editStudent._id}`, newData)
+            .then(res => {
+                if (res.data.acknowledged) {
+                    window.alert('Food item updated Succesfully');
+                    setNewStatus('')
+                    setOpen(false);
+
+                }
+            });
     };
 
-
-    const handleApprove = id => {
-        const data = {
-            status: true
-        };
-        // axios.put(`${databaseUrl}/blogs/${id}`, data)
-        //     .then(res => {
-        //         if (res.data.acknowledged) {
-        //             handleToast('success', 'Blog Approved Succesfully');
-        //             setOpen(false);
-        //         }
-        //     });
-    }
     const handleClose = () => setOpen(false);
     return (
         <div>
@@ -82,80 +79,81 @@ export default function BasicModal({ open, setOpen, handleDelete }) {
                     >
 
                         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                            <Grid item xs={4} sm={4} md={4} >
-                                <CssTextField
-                                    sx={{ width: 1 }}
-                                    label="Blogger"
-                                    defaultValue='{blogPoster}'
-                                    type='text'
-                                    {...register("blogPoster", { required: true })} />
+                            <Grid item xs={2} sm={4} md={4} >
+                                <TextField
+                                    size='small'
+                                    fullWidth
+                                    label="Full Name"
+                                    defaultValue={editStudent.fullName}
+                                    variant="outlined"
+                                    {...register("fullName", { required: true })}
+                                />
                             </Grid>
-                            <Grid item xs={4} sm={4} md={4} >
-                                <CssTextField
-                                    sx={{ width: 1 }}
-                                    label="Blogger Email"
-                                    defaultValue="{bloggerEmail}"
-                                    type='text'
-                                    {...register("bloggerEmail", { required: true })} />
-                            </Grid>
-                            <Grid item xs={4} sm={4} md={4} >
-                                <CssTextField
-                                    sx={{ width: 1 }}
-                                    label="Blog Title"
-                                    defaultValue='{blogTitle}'
-                                    type='text'
-                                    {...register("blogTitle", { required: true })} />
-                            </Grid>
-
-                            <Grid item xs={4} sm={4} md={4} >
-                                <CssTextField
-                                    sx={{ width: 1 }}
-                                    label="Location"
-                                    defaultValue='{location}'
-                                    type='text'
-                                    {...register("location", { required: true })} />
-                            </Grid>
-
-
-                            <Grid item xs={4} sm={4} md={4} >
-                                <CssTextField
-                                    sx={{ width: 1 }}
-                                    label="Rating"
+                            <Grid item xs={2} sm={4} md={4} >
+                                <TextField
+                                    size='small'
+                                    fullWidth
+                                    label="Roll"
+                                    defaultValue={editStudent.roll}
+                                    variant="outlined"
                                     type='number'
-                                    defaultValue={4}
-                                    {...register("rating", { required: true })} />
+                                    {...register("roll", { required: true })}
+                                />
                             </Grid>
-
-                            <Grid item xs={4} sm={4} md={4} >
-                                <CssTextField
-                                    sx={{ width: 1 }}
-                                    label="Cost"
-                                    defaultValue={34}
+                            <Grid item xs={2} sm={4} md={4} >
+                                <TextField
+                                    size='small'
+                                    fullWidth
+                                    label="Age"
+                                    defaultValue={editStudent.age}
+                                    variant="outlined"
                                     type='number'
-                                    {...register("cost", { required: true })} />
+                                    {...register("age", { required: true })}
+                                />
                             </Grid>
+                            <Grid item xs={2} sm={4} md={4} >
+                                <TextField
+                                    size='small'
+                                    fullWidth
+                                    label="Class"
 
-                            <Grid item xs={4} sm={4} md={4} >
-                                <CssTextField
-                                    sx={{ width: 1 }}
-                                    label="Description"
-                                    defaultValue='{description}'
-                                    type='textarea'
-                                    {...register("description", { required: true })} />
+                                    defaultValue={editStudent.class}
+                                    variant="outlined"
+                                    type='number'
+                                    {...register("class", { required: true })}
+                                />
+                            </Grid>
+                            <Grid item xs={2} sm={4} md={4} >
+                                <TextField
+                                    size='small'
+                                    fullWidth
+                                    label="Hall Name"
+                                    defaultValue={editStudent.hall}
+                                    variant="outlined"
+                                    {...register("hall", { required: true })}
+                                />
+                            </Grid>
+                            <Grid item xs={2} sm={4} md={4} >
+                                <FormControl fullWidth size='small'>
+                                    <InputLabel id="demo-simple-select-label">Status</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        defaultValue={editStudent.status}
+                                        label="Status"
+                                        onChange={e => setNewStatus(e.target.value)}
+                                        required
+                                    >
+                                        <MenuItem value={'active'}>Active</MenuItem>
+                                        <MenuItem value={'inActive'}>inActive</MenuItem>
+                                    </Select>
+                                </FormControl>
                             </Grid>
                         </Grid>
                         <br />
-                        <Stack direction="row" spacing={2}><Button size="small" variant="contained" color='success' onClick={() => handleApprove()}>
-                            Approve
+                        <Button size="small" variant="contained" color='warning' type='submit'>
+                            update
                         </Button>
-                            <Button size="small" variant="contained" color='warning' type='submit'>
-                                update
-                            </Button>
-                            <Button size="small" variant="contained" color='error'
-                                onClick={() => handleDelete()}>
-                                Delete
-                            </Button>
-                        </Stack>
                     </Box>
                 </Box>
             </Modal>

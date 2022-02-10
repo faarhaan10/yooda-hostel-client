@@ -155,6 +155,7 @@ const AddFood = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            {/* pagination  */}
             <Stack direction="row" spacing={2} sx={{ alignItems: 'center', px: 3 }}>
                 <Typography>Page: {page + 1}</Typography>
                 <Pagination

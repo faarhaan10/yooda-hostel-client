@@ -12,6 +12,7 @@ const AddStudent = () => {
             .then(res => {
                 if (res.data.insertedId) {
                     window.alert('student added');
+                    setStatus('')
                     reset();
                 }
             });
