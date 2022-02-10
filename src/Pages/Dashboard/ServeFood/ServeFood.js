@@ -14,14 +14,14 @@ const ServeFood = () => {
     const [toggle, setToggle] = useState(false)
 
     React.useEffect(() => {
-        axios.get(`http://localhost:5000/student/roll/${search}`)
+        axios.get(`https://yooda-hostel-server-side.herokuapp.com/student/roll/${search}`)
             .then(res => {
                 setStudent(res.data);
             })
     }, [search, toggle]);
 
     React.useEffect(() => {
-        axios.get(`http://localhost:5000/foods`)
+        axios.get(`https://yooda-hostel-server-side.herokuapp.com/foods`)
             .then(res => {
                 setFoods(res.data.result);
             })
@@ -44,13 +44,13 @@ const ServeFood = () => {
             foodItem
         };
         const statusUpdate = { status: 'served' }
-        axios.put(`http://localhost:5000/serve/${student._id}`, statusUpdate)
+        axios.put(`https://yooda-hostel-server-side.herokuapp.com/serve/${student._id}`, statusUpdate)
             .then(res => {
                 if (res.data.insertedId) {
                 }
             });
 
-        axios.post('http://localhost:5000/serve', data)
+        axios.post('https://yooda-hostel-server-side.herokuapp.com/serve', data)
             .then(res => {
                 if (res.data.insertedId) {
                     window.alert('served');

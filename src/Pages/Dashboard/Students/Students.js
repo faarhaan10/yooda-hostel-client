@@ -26,7 +26,7 @@ const Students = () => {
 
     // load all students 
     React.useEffect(() => {
-        axios.get(`http://localhost:5000/students?page=${page}&&size=${size}`)
+        axios.get(`https://yooda-hostel-server-side.herokuapp.com/students?page=${page}&&size=${size}`)
             .then(res => {
                 setAllStudent(res.data.result);
                 const count = res.data.count;
@@ -40,7 +40,7 @@ const Students = () => {
     // User delete handler
     const handleDelete = id => {
 
-        axios.delete(`http://localhost:5000/students/${id}`)
+        axios.delete(`https://yooda-hostel-server-side.herokuapp.com/students/${id}`)
             .then(res => {
                 if (res.data.deletedCount) {
                     alert('Users deleted Succesfully');
@@ -51,7 +51,7 @@ const Students = () => {
     };
     const handleActive = isActive => {
         const data = { status: isActive, selectedStudents };
-        axios.put(`http://localhost:5000/students`, data)
+        axios.put(`https://yooda-hostel-server-side.herokuapp.com/students`, data)
             .then(res => {
                 if (res.data.acknowledged) {
                     alert('Users updated Succesfully');

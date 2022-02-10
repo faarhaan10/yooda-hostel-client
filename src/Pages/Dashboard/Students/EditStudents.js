@@ -51,7 +51,7 @@ export default function BasicModal({ open, setOpen, editStudent }) {
             newData = { ...data, status: editStudent.status };
         }
 
-        axios.put(`http://localhost:5000/students/${editStudent._id}`, newData)
+        axios.put(`https://yooda-hostel-server-side.herokuapp.com/students/${editStudent._id}`, newData)
             .then(res => {
                 if (res.data.acknowledged) {
                     window.alert('Food item updated Succesfully');

@@ -8,7 +8,7 @@ const AddStudent = () => {
     const { register, handleSubmit, reset } = useForm();
     const onSubmit = data => {
         const newData = { ...data, status };
-        axios.post('http://localhost:5000/students', newData)
+        axios.post('https://yooda-hostel-server-side.herokuapp.com/students', newData)
             .then(res => {
                 if (res.data.insertedId) {
                     window.alert('student added');

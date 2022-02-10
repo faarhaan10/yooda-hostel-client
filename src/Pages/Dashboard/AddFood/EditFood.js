@@ -43,7 +43,7 @@ export default function BasicModal({ open, setOpen, item }) {
     const { _id, name, price } = item;
 
     const onSubmit = data => {
-        axios.put(`http://localhost:5000/foods/${_id}`, data)
+        axios.put(`https://yooda-hostel-server-side.herokuapp.com/foods/${_id}`, data)
             .then(res => {
                 if (res.data.acknowledged) {
                     window.alert('Food item updated Succesfully');

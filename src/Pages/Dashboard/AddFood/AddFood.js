@@ -17,7 +17,7 @@ const AddFood = () => {
 
     const { register, handleSubmit, reset } = useForm();
     const onSubmit = data => {
-        axios.post('http://localhost:5000/foods', data)
+        axios.post('https://yooda-hostel-server-side.herokuapp.com/foods', data)
             .then(res => {
                 if (res.data.insertedId) {
                     window.alert('food added');
@@ -29,7 +29,7 @@ const AddFood = () => {
 
     // load foods 
     React.useEffect(() => {
-        axios.get(`http://localhost:5000/foods?page=${page}&&size=${size}`)
+        axios.get(`https://yooda-hostel-server-side.herokuapp.com/foods?page=${page}&&size=${size}`)
             .then(res => {
                 setFoodItems(res.data.result);
                 setDisplayFoodItems(res.data.result);
@@ -43,7 +43,7 @@ const AddFood = () => {
     // delete handler
     const handleDelete = id => {
 
-        axios.delete(`http://localhost:5000/foods/${id}`)
+        axios.delete(`https://yooda-hostel-server-side.herokuapp.com/foods/${id}`)
             .then(res => {
                 if (res.data.deletedCount) {
                     alert('Users deleted Succesfully');
