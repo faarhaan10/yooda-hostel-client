@@ -14,7 +14,7 @@ import EditStudents from './EditStudents';
 
 const Students = () => {
     const [allStudent, setAllStudent] = React.useState([]);
-    const [displayStudents, setDisplayStudents] = React.useState([]);
+    const [toggle, setToggle] = React.useState(false);
     const [selectedStudents, setSelectedStudents] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [pageCount, setPageCount] = React.useState(0);
@@ -29,13 +29,12 @@ const Students = () => {
         axios.get(`http://localhost:5000/students?page=${page}&&size=${size}`)
             .then(res => {
                 setAllStudent(res.data.result);
-                setDisplayStudents(res.data.result);
                 const count = res.data.count;
                 setTotal(count);
                 const pageNumber = Math.ceil(count / size);
                 setPageCount(pageNumber);
             })
-    }, [page, open]);
+    }, [page, open, toggle]);
 
 
     // User delete handler
@@ -51,25 +50,25 @@ const Students = () => {
             });
     };
     const handleActive = isActive => {
-        // axios.put(`${databaseUri}/manage`, selectedUsers)
-        //     .then(res => {
-        //         if (res.data.acknowledged) {
-        //             alert('Users updated Succesfully');
-        //             navigate('/dashboard')
-        //         }
-        //     });
-        console.log(isActive)
+        const data = { status: isActive, selectedStudents };
+        axios.put(`http://localhost:5000/students`, data)
+            .then(res => {
+                if (res.data.acknowledged) {
+                    alert('Users updated Succesfully');
+                    setToggle(!toggle);
+                }
+            });
     }
 
-    const handleCheck = (isChecked, email) => {
-        const newUser = [...selectedStudents];
+    const handleCheck = (isChecked, id) => {
+        const newStudent = [...selectedStudents];
         if (isChecked) {
-            newUser.push(email);
-            setSelectedStudents(newUser);
+            newStudent.push(id);
+            setSelectedStudents(newStudent);
         }
         else {
-            const restUser = newUser.filter(user => user !== email);
-            setSelectedStudents(restUser);
+            const restStudent = newStudent.filter(student => student !== id);
+            setSelectedStudents(restStudent);
         }
     };
 
@@ -83,19 +82,22 @@ const Students = () => {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Stack direction="row" spacing={2} sx={{ justifyContent: 'space-between' }}>
                         <Typography variant="body1" sx={{ p: 3 }} >
-                            Foods in this page: {allStudent.length}
+                            Students in this page: {allStudent.length}
                         </Typography>
                         <Typography variant="body1" sx={{ p: 3 }} >
-                            Total Food Items: {total}
+                            Total students: {total}
+                        </Typography>
+                        <Typography variant="body1" sx={{ p: 3 }} >
+                            Selected: {selectedStudents.length}
                         </Typography>
                     </Stack>
-                    <Box>
+                    {selectedStudents.length !== 0 && <Box>
                         <ButtonGroup size="small" variant="text" aria-label="outlined button group">
                             <Button onClick={() => handleActive('Active')}>Active</Button>
                             <Button onClick={() => handleActive('inActive')}>inActive</Button>
                         </ButtonGroup>
                     </Box>
-
+                    }
                 </Box>
                 <TableContainer sx={{ minHeight: 450 }}>
                     <Table stickyHeader aria-label="sticky table">
@@ -135,6 +137,7 @@ const Students = () => {
                                     <TableCell >
                                         <Checkbox
                                             color="success"
+                                            onChange={e => handleCheck(e.target.checked, student._id)}
                                         />
                                     </TableCell>
                                     <TableCell >
